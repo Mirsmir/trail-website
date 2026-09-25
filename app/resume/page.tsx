@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import '@fontsource/anton/400.css';
-import '@fontsource/jetbrains-mono/400.css';
-import '@fontsource/jetbrains-mono/600.css';
-import '@fontsource-variable/fraunces/standard.css';
-import '@fontsource-variable/fraunces/standard-italic.css';
-import '@fontsource-variable/inter-tight/index.css';
+//import '@fontsource/anton/400.css';
+//import '@fontsource/jetbrains-mono/400.css';
+//import '@fontsource/jetbrains-mono/600.css';
+//import '@fontsource-variable/fraunces/standard.css';
+//import '@fontsource-variable/fraunces/standard-italic.css';
+//import '@fontsource-variable/inter-tight/index.css';
 import GradeMark from '@/components/GradeMark';
 import { checkpointBySlug, checkpoints, type Grade } from '@/content/checkpoints';
 import { resume } from '@/content/resume';

@@ -10,6 +10,9 @@
  * Compressed files (≈100–250 KB each) are all kept in memory as Blobs; only a
  * window of frames around the rider is decoded into ImageBitmaps, and frames
  * far from the rider are released.
+ * i genuinely dont know wt happened to my git thing omg help i don tknow if i like claude very much sorry claude you
+ * are a bit scary just don't scare me hahahahahha
+ * WHY R CAN I NOT SEE MY CHANGES/??????/ WHY CANT I PUSH??? 
  */
 
 export interface FrameManifest {
