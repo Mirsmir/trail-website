@@ -369,7 +369,7 @@
   background: #d3dc8a;
 }
 
-/* The mossy trunk with carved wood-grain blocks. */
+/* mossy trunk with carved wood-grain blocks, removed made jsut a box now */
 .trunk {
   position: relative;
   display: none;
@@ -377,9 +377,9 @@
   align-items: center;
   gap: 22px;
   padding: 56px 0 70px;
-  background:
+  /* background:
     linear-gradient(90deg, rgb(10 16 12 / 0.75) 0%, transparent 22%, transparent 78%, rgb(10 16 12 / 0.85) 100%),
-    url('/resume/bark.jpg') center / cover no-repeat;
+    url('/resume/bark.jpg') center / cover no-repeat; */
   box-shadow:
     -30px 30px 60px rgb(0 0 0 / 0.65),
     inset 0 0 40px rgb(0 0 0 / 0.5);

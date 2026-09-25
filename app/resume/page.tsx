@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-//import '@fontsource/anton/400.css';
-//import '@fontsource/jetbrains-mono/400.css';
-//import '@fontsource/jetbrains-mono/600.css';
-//import '@fontsource-variable/fraunces/standard.css';
-//import '@fontsource-variable/fraunces/standard-italic.css';
-//import '@fontsource-variable/inter-tight/index.css';
+import '@fontsource/anton/400.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/600.css';
+import '@fontsource-variable/fraunces/standard.css';
+import '@fontsource-variable/fraunces/standard-italic.css';
+import '@fontsource-variable/inter-tight/index.css';
 import GradeMark from '@/components/GradeMark';
 import { checkpointBySlug, checkpoints, type Grade } from '@/content/checkpoints';
 import { resume } from '@/content/resume';
@@ -33,11 +33,11 @@ const SAMPLES = [
 ];
 
 const GRADE_NAMES: Record<Grade, string> = {
-  green: 'Green circle. Easy going.',
-  blue: 'Blue square. A bit more to it.',
-  black: 'Black diamond. Steep and technical.',
-  'double-black': 'Double black. Experts only.',
-  freeride: 'Freeride. Just for fun.',
+  green: 'Green Disco Don.',
+  blue: 'Blue Northern Pass',
+  black: 'Black diamond YoYoMama',
+  'double-black': 'Double black',
+  freeride: 'Freeride',
 };
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -114,16 +114,16 @@ export default function ResumePage() {
 
             <dl className={styles.coords}>
               <div>
-                <dt>Trailhead</dt>
+                <dt>Jefferson</dt>
                 <dd>
-                  49.3712° N
+                  43.952° N
                   <br />
-                  123.0993° W
+                  -79.421° W
                 </dd>
               </div>
               <div>
                 <dt>Elev.</dt>
-                <dd>720 m</dd>
+                <dd>294 m</dd>
               </div>
             </dl>
 
@@ -140,7 +140,7 @@ export default function ResumePage() {
             {GRAIN.map((src) => (
               <img key={src} src={src} alt="" width={212} height={213} />
             ))}
-            <span className={styles.trunkSig}>“ride.”</span>
+            {/* <span className={styles.trunkSig}>“ride.”</span> */}
           </div>
 
           <aside className={styles.legend} aria-hidden>
