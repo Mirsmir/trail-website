@@ -1,0 +1,43 @@
+.mark {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.02em;
+  font-size: var(--mark-size, 1em);
+  line-height: 1;
+}
+
+.shape {
+  display: block;
+  width: 1em;
+  height: 1em;
+}
+
+.mark[data-grade='green'] .shape {
+  background: var(--grade-green);
+  border-radius: 50%;
+}
+
+.mark[data-grade='blue'] .shape {
+  background: var(--grade-blue);
+  border-radius: 0.1em;
+}
+
+.mark[data-grade='black'] .shape,
+.mark[data-grade='double-black'] .shape {
+  background: var(--grade-black);
+  border-radius: 0.08em;
+  box-shadow: 0 0 0 0.09em var(--birch);
+  transform: rotate(45deg) scale(0.72);
+}
+
+.mark[data-grade='double-black'] .shape + .shape {
+  margin-left: -0.12em;
+}
+
+.mark[data-grade='freeride'] .shape {
+  width: 1.4em;
+  height: 0.86em;
+  background: var(--grade-orange);
+  border-radius: 999px;
+}

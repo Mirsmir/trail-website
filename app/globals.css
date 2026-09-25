@@ -1,0 +1,127 @@
+/* ==========================================================================
+   Design tokens. The whole site is built from these.
+   ========================================================================== */
+
+:root {
+  /* Dirt and bark. Sign boards and page backgrounds. */
+  --loam: #241a13;
+  --loam-deep: #120d09;
+  --loam-raised: #2e2219;
+  /* Text. */
+  --birch: #eeeae1;
+  --birch-dim: rgb(238 234 225 / 0.72);
+  --birch-faint: rgb(238 234 225 / 0.14);
+  /* Flagging tape. Only for "you are here" and the thing you're about to press. */
+  --pink: #ff4f9a;
+  /* Secondary accent. */
+  --moss: #8da47a;
+  /* Trail grades. */
+  --grade-green: #3aa655;
+  --grade-blue: #2f7de1;
+  --grade-black: #0a0908;
+  --grade-orange: #f28c28;
+
+  --font: 'Mona Sans Variable', 'Mona Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Type scale. */
+  --t-xs: 13px;
+  --t-sm: 15px;
+  --t-md: 17px;
+  --t-lg: 21px;
+  --t-xl: 26px;
+  --t-2xl: 33px;
+  --t-3xl: 52px;
+  --t-4xl: 84px;
+
+  --radius: 14px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--loam-deep);
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--loam-deep);
+  color: var(--birch);
+  font-family: var(--font);
+  font-size: var(--t-md);
+  line-height: 1.5;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--pink);
+  color: var(--loam-deep);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Paper version (mostly for the resume): flip the palette to ink on white. */
+@media print {
+  :root {
+    --birch: #111;
+    --birch-dim: #444;
+    --birch-faint: #ccc;
+    --loam-deep: #fff;
+  }
+  body {
+    font-size: 12pt;
+  }
+}

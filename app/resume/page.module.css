@@ -1,0 +1,129 @@
+.summary {
+  margin: 0 0 clamp(56px, 8vw, 88px);
+  max-width: 50ch;
+  font-size: clamp(var(--t-lg), 2.4vw, var(--t-xl));
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.jobs {
+  display: grid;
+  gap: 48px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.job {
+  display: grid;
+  gap: 8px;
+}
+
+@media (min-width: 640px) {
+  .job {
+    grid-template-columns: 110px 1fr;
+    gap: 24px;
+  }
+}
+
+.when {
+  margin: 0;
+  padding-top: 4px;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--birch-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.role {
+  margin: 0;
+  font-size: var(--t-lg);
+  font-weight: 760;
+  line-height: 1.2;
+}
+
+.company {
+  margin: 4px 0 0;
+  font-weight: 600;
+}
+
+.where {
+  font-weight: 450;
+  color: var(--birch-dim);
+}
+
+.jobSummary {
+  margin: 10px 0 0;
+  color: var(--birch-dim);
+}
+
+.bullets {
+  margin: 14px 0 16px;
+  padding-left: 1.1em;
+  display: grid;
+  gap: 8px;
+  max-width: 64ch;
+}
+
+.bullets li::marker {
+  color: var(--moss);
+}
+
+.projects {
+  display: grid;
+  gap: 36px;
+}
+
+@media (min-width: 700px) {
+  .projects {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px 48px;
+  }
+}
+
+.project p {
+  margin: 8px 0 14px;
+  color: rgb(238 234 225 / 0.84);
+}
+
+.projectName {
+  margin: 0;
+  font-size: var(--t-lg);
+  font-weight: 760;
+}
+
+.projectName a {
+  text-decoration-color: var(--pink);
+  text-underline-offset: 4px;
+}
+
+.skills {
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.skillRow {
+  display: grid;
+  gap: 2px;
+}
+
+@media (min-width: 640px) {
+  .skillRow {
+    grid-template-columns: 180px 1fr;
+    gap: 24px;
+  }
+}
+
+.skillRow dt {
+  font-weight: 700;
+}
+
+.skillRow dd {
+  margin: 0;
+  color: rgb(238 234 225 / 0.84);
+}
+
+.edu + .edu {
+  margin-top: 28px;
+}

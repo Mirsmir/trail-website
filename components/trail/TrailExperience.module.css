@@ -1,0 +1,616 @@
+/* ==========================================================================
+   The ride. Everything here is positioned by JS every frame except layout.
+   Sizes inside the video window use cqw/cqh, so signs scale with the window.
+   ========================================================================== */
+
+.root {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--loam-deep);
+  color: var(--birch);
+  touch-action: none;
+  overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Blurred, stretched copy of the footage filling the whole screen. It is only
+   128×72 pixels; the blur hides that and makes the page feel like the forest. */
+.ambient {
+  position: absolute;
+  inset: -8%;
+  width: 116%;
+  height: 116%;
+  max-width: none;
+  filter: blur(46px) saturate(1.3) brightness(0.62);
+  opacity: 0;
+  transition: opacity 2.4s ease;
+  z-index: 0;
+}
+
+/* The renderer already blurred it inside the canvas (much cheaper). */
+.ambient[data-filtered='true'] {
+  filter: none;
+}
+
+.root[data-ready='true'] .ambient {
+  opacity: 1;
+}
+
+/* Deepens the edges of the screen so the window reads as the light source. */
+.root::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 65% at 50% 48%, transparent 30%, rgb(10 7 5 / 0.55) 100%),
+    linear-gradient(to bottom, rgb(10 7 5 / 0.25), transparent 30%, transparent 70%, rgb(10 7 5 / 0.4));
+}
+
+.layout {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--gutter, 24px) * 0.6);
+  padding: var(--gutter, 24px);
+}
+
+.root[data-narrow='true'] .layout {
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ---- The video window ------------------------------------------------------ */
+
+.stage {
+  position: relative;
+  flex: none;
+  border-radius: 14px;
+  overflow: hidden;
+  container-type: size;
+  background: #0b0806;
+  box-shadow:
+    0 0 0 1px rgb(238 234 225 / 0.07),
+    0 40px 90px -30px rgb(0 0 0 / 0.75),
+    0 10px 30px -10px rgb(0 0 0 / 0.5);
+  /* Keeps the rounded clip crisp on Safari while children transform. */
+  transform: translateZ(0);
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Dim + vignette under the text. --dim comes from trail.config.ts. */
+.shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 75% at 50% 42%, transparent 40%, rgb(8 5 3 / 0.5) 100%),
+    linear-gradient(to top, rgb(12 8 5 / 0.62), transparent 42%),
+    rgb(0 0 0 / var(--dim, 0.3));
+}
+
+/* ---- Signs in the forest ----------------------------------------------------------- */
+
+.signs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* A zero-size point that JS places in perspective. Its children hang from it. */
+.pose {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+
+/* The bottom-centre of whatever is inside sits exactly on the pose point. */
+.anchor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: clamp(250px, 31cqw, 400px);
+  padding-bottom: clamp(14px, 3.2cqh, 30px);
+  transform: translate(-50%, -100%);
+}
+
+.float {
+  animation: bob 6.5s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.float[data-active='true'] {
+  animation-play-state: running;
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+.shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 78%;
+  height: 22px;
+  translate: -50% 50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.55), rgb(0 0 0 / 0.22) 55%, transparent);
+  animation: shadow 6.5s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.float[data-active='true'] + .shadow {
+  animation-play-state: running;
+}
+
+@keyframes shadow {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleX(0.9);
+    opacity: 0.75;
+  }
+}
+
+/* Trail direction board: an arrow-shaped plank pointing off the trail. The
+   shape lives on pseudo-elements so the text itself is never clipped. */
+.sign {
+  --point: clamp(22px, 2.6cqw, 32px);
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  padding: 20px 26px 22px;
+  color: var(--birch);
+  text-decoration: none;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.sign[data-side='right'] {
+  padding-right: calc(26px + var(--point));
+}
+
+.sign[data-side='left'] {
+  padding-left: calc(26px + var(--point));
+}
+
+.sign::before,
+.sign::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  transition: background-color 0.3s ease;
+}
+
+/* Edge of the board. */
+.sign::before {
+  inset: 0;
+  background: rgb(238 234 225 / 0.16);
+}
+
+/* Face of the board, with a little wood grain. */
+.sign::after {
+  inset: 1.5px;
+  background:
+    repeating-linear-gradient(177deg, rgb(255 240 220 / 0.022) 0 2px, transparent 2px 9px),
+    linear-gradient(170deg, #3a2a1e 0%, var(--loam) 55%, #1d150f 100%);
+}
+
+.sign[data-side='right']::before,
+.sign[data-side='right']::after {
+  clip-path: polygon(
+    0 4px,
+    4px 0,
+    calc(100% - var(--point)) 0,
+    100% 50%,
+    calc(100% - var(--point)) 100%,
+    4px 100%,
+    0 calc(100% - 4px)
+  );
+}
+
+.sign[data-side='left']::before,
+.sign[data-side='left']::after {
+  clip-path: polygon(
+    var(--point) 0,
+    calc(100% - 4px) 0,
+    100% 4px,
+    100% calc(100% - 4px),
+    calc(100% - 4px) 100%,
+    var(--point) 100%,
+    0 50%
+  );
+}
+
+.signHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  --mark-size: clamp(18px, 2cqw, 24px);
+}
+
+.signTitle {
+  font-size: clamp(28px, 3.3cqw, 42px);
+  font-weight: 820;
+  font-stretch: 76%;
+  line-height: 0.92;
+  letter-spacing: -0.005em;
+}
+
+.signBlurb {
+  font-size: clamp(14px, 1.25cqw, 16px);
+  line-height: 1.42;
+  color: rgb(238 234 225 / 0.8);
+  text-wrap: pretty;
+}
+
+.signCta {
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid rgb(238 234 225 / 0.3);
+  font-size: 14px;
+  font-weight: 640;
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease;
+}
+
+.float[data-active='true'] .signCta,
+.sign:hover .signCta {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: var(--loam-deep);
+}
+
+.sign:focus-visible {
+  outline: none;
+}
+
+.sign:focus-visible .signCta {
+  outline: 2px solid var(--pink);
+  outline-offset: 3px;
+}
+
+/* ---- Trailhead ----------------------------------------------------------------------- */
+
+.pose:first-child .anchor {
+  width: min(64cqw, 860px);
+  padding-bottom: 0;
+}
+
+.trailhead {
+  text-shadow: 0 2px 40px rgb(0 0 0 / 0.45);
+}
+
+.name {
+  margin: 0;
+  font-size: clamp(48px, 9.6cqw, 156px);
+  font-weight: 850;
+  font-stretch: 75%;
+  line-height: 0.84;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.tagline {
+  margin: 0.9em 0 0;
+  max-width: 34ch;
+  font-size: clamp(16px, 1.75cqw, 22px);
+  line-height: 1.4;
+  color: rgb(238 234 225 / 0.86);
+  text-wrap: pretty;
+}
+
+.hint {
+  margin: 1.8em 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(238 234 225 / 0.78);
+  opacity: 0;
+  transition: opacity 0.8s ease 0.4s;
+}
+
+/* A tiny wheel that keeps rolling downward. */
+.hint::before {
+  content: '';
+  flex: none;
+  width: 18px;
+  height: 28px;
+  border-radius: 10px;
+  border: 1.5px solid rgb(238 234 225 / 0.6);
+  background: linear-gradient(var(--birch), var(--birch)) no-repeat 50% 6px / 2px 6px;
+  animation: wheel 1.8s cubic-bezier(0.45, 0, 0.35, 1) infinite;
+}
+
+@keyframes wheel {
+  0% {
+    background-position: 50% 5px;
+    background-size: 2px 5px;
+  }
+  60%,
+  100% {
+    background-position: 50% 16px;
+    background-size: 2px 0;
+  }
+}
+
+.root[data-docked='trailhead'] .hint {
+  opacity: 1;
+}
+
+.hintTouch {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .hintPointer {
+    display: none;
+  }
+  .hintTouch {
+    display: inline;
+  }
+  .hint::before {
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    background: linear-gradient(var(--birch), var(--birch)) no-repeat 50% 50% / 2px 8px;
+    animation: none;
+  }
+}
+
+/* ---- Trail's end ---------------------------------------------------------------------- */
+
+.pose:last-child .anchor {
+  width: min(70cqw, 620px);
+  padding-bottom: 0;
+}
+
+.trailEnd {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  text-shadow: 0 2px 30px rgb(0 0 0 / 0.5);
+}
+
+.endTitle {
+  margin: 0;
+  font-size: clamp(40px, 6.4cqw, 92px);
+  font-weight: 840;
+  font-stretch: 75%;
+  line-height: 0.88;
+  letter-spacing: -0.015em;
+}
+
+.endLine {
+  margin: 0.8em 0 0;
+  max-width: 36ch;
+  font-size: clamp(15px, 1.5cqw, 18px);
+  line-height: 1.45;
+  color: rgb(238 234 225 / 0.84);
+  text-wrap: balance;
+}
+
+.again {
+  margin-top: 22px;
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 999px;
+  border: 1px solid rgb(238 234 225 / 0.35);
+  background: rgb(18 13 9 / 0.35);
+  color: var(--birch);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 650;
+  text-shadow: none;
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease;
+}
+
+.float[data-active='true'] .again,
+.again:hover {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: var(--loam-deep);
+}
+
+/* ---- Readouts ------------------------------------------------------------------------- */
+
+.hud {
+  position: absolute;
+  left: 18px;
+  bottom: 12px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.speed {
+  min-width: 1.2em;
+  text-align: right;
+  font-size: 30px;
+  font-weight: 780;
+  font-stretch: 78%;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.unit {
+  font-size: 13px;
+  font-weight: 560;
+  color: rgb(238 234 225 / 0.7);
+}
+
+.status {
+  position: absolute;
+  right: 18px;
+  bottom: 14px;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 560;
+  color: rgb(238 234 225 / 0.72);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.devNote {
+  position: absolute;
+  left: 50%;
+  top: 12px;
+  translate: -50% 0;
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgb(18 13 9 / 0.7);
+  font-size: 12px;
+  font-weight: 560;
+  color: rgb(238 234 225 / 0.8);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ---- Narrow screens: portrait window, map strip underneath ------------------------ */
+
+.root[data-narrow='true'] .anchor {
+  width: 84cqw;
+  padding-bottom: 0;
+}
+
+.root[data-narrow='true'] .pose:first-child .anchor,
+.root[data-narrow='true'] .pose:last-child .anchor {
+  width: 86cqw;
+}
+
+.root[data-narrow='true'] .shadow {
+  display: none;
+}
+
+.root[data-narrow='true'] .sign {
+  padding-top: 16px;
+  padding-bottom: 18px;
+}
+
+.root[data-narrow='true'] .signTitle {
+  font-size: clamp(26px, 8.4cqw, 36px);
+}
+
+.root[data-narrow='true'] .signBlurb {
+  font-size: 15px;
+}
+
+.root[data-narrow='true'] .name {
+  font-size: clamp(46px, 17cqw, 96px);
+}
+
+.root[data-narrow='true'] .tagline {
+  font-size: 16px;
+}
+
+.root[data-narrow='true'] .hud {
+  left: 14px;
+  top: 12px;
+  bottom: auto;
+}
+
+.root[data-narrow='true'] .status {
+  top: 14px;
+  right: 14px;
+  bottom: auto;
+}
+
+/* ---- Page transitions ---------------------------------------------------------------- */
+
+.fade {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: #0a0705;
+  opacity: 1;
+  pointer-events: none;
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.noscript {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-content: center;
+  gap: 20px;
+  padding: 32px;
+  background: var(--loam-deep);
+  font-size: 18px;
+}
+
+.noscript p {
+  margin: 0;
+  font-size: 48px;
+  font-weight: 850;
+  font-stretch: 75%;
+}
+
+.noscript ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.noscript a {
+  color: var(--birch);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float,
+  .shadow,
+  .hint::before {
+    animation: none;
+  }
+  .ambient {
+    transition: none;
+  }
+}

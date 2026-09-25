@@ -1,0 +1,75 @@
+/* Small shared bits for page content. Import and use as className={ui.button}. */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 22px;
+  border-radius: 999px;
+  border: 1px solid rgb(238 234 225 / 0.3);
+  background: transparent;
+  color: var(--birch);
+  font-size: var(--t-sm);
+  font-weight: 650;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.button:hover {
+  border-color: var(--birch);
+}
+
+.primary {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: var(--loam-deep);
+}
+
+.primary:hover {
+  background: #ff6aab;
+  border-color: #ff6aab;
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgb(238 234 225 / 0.08);
+  font-size: var(--t-xs);
+  font-weight: 560;
+  color: var(--birch-dim);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.prose {
+  max-width: 62ch;
+  line-height: 1.6;
+}
+
+.prose > * + * {
+  margin-top: 1em;
+}
+
+.prose a {
+  text-decoration-color: var(--pink);
+  text-underline-offset: 3px;
+}

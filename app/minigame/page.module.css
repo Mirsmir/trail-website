@@ -1,0 +1,122 @@
+.head {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.gameTitle {
+  margin: 0;
+  font-size: var(--t-2xl);
+  font-weight: 820;
+  font-stretch: 78%;
+  line-height: 1;
+}
+
+.blurb {
+  margin: 0;
+  max-width: 52ch;
+  color: rgb(238 234 225 / 0.82);
+}
+
+.embed {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--loam);
+}
+
+.embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.how {
+  margin: 0;
+  font-size: var(--t-sm);
+  color: var(--birch-dim);
+}
+
+/* ---- LogHop ------------------------------------------------------------------ */
+
+.game {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--loam);
+  box-shadow: 0 0 0 1px rgb(238 234 225 / 0.07);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+
+.game canvas {
+  display: block;
+  width: 100%;
+  height: clamp(260px, 42vw, 420px);
+}
+
+.game:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 4px;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 6px;
+  text-align: center;
+  pointer-events: none;
+  text-shadow: 0 2px 20px rgb(0 0 0 / 0.5);
+}
+
+.overlayTitle {
+  margin: 0;
+  font-size: clamp(30px, 5vw, 52px);
+  font-weight: 840;
+  font-stretch: 76%;
+  line-height: 1;
+}
+
+.overlayLine {
+  margin: 0;
+  font-size: var(--t-sm);
+  color: rgb(238 234 225 / 0.85);
+}
+
+.score {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  margin: 0;
+  text-align: right;
+  font-size: var(--t-xs);
+  color: var(--birch-dim);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.score strong {
+  display: block;
+  font-size: var(--t-2xl);
+  font-weight: 800;
+  font-stretch: 78%;
+  color: var(--birch);
+  line-height: 1;
+}

@@ -1,0 +1,210 @@
+/* The side menu as a trail map. --e (0–1) is set per item every frame by how
+   close the rider is to that stop; --ride (0–1) is the rider's progress. */
+
+.map {
+  position: relative;
+  flex: none;
+  width: var(--map-w, 200px);
+  height: var(--stage-h, 70vh);
+  z-index: 1;
+}
+
+.column {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 56px;
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.halo,
+.line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.halo {
+  stroke: rgb(238 234 225 / 0.14);
+  stroke-width: 7;
+}
+
+.line {
+  stroke-width: 2.5;
+  stroke-dasharray: 7 6;
+}
+
+/* "You are here": a flagging-tape ring that rides along the line. */
+.rider,
+.riderStraight {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border-radius: 50%;
+  border: 2.5px solid var(--pink);
+  box-shadow:
+    0 0 14px 1px rgb(255 79 154 / 0.55),
+    inset 0 0 8px rgb(255 79 154 / 0.35);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.straight {
+  display: none;
+}
+
+.list {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  --e: 0;
+  position: absolute;
+  top: calc(var(--y) * 100%);
+  /* Put the marker's centre on the line. */
+  right: calc(56px - var(--x) - 9px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0 6px 10px;
+  border: 0;
+  background: none;
+  color: var(--birch);
+  font: inherit;
+  text-align: right;
+  cursor: pointer;
+  transform: translateY(-50%) scale(calc(1 + var(--e) * 0.28));
+  transform-origin: calc(100% - 9px) 50%;
+}
+
+.label {
+  max-width: calc(var(--map-w, 200px) - 56px - 22px);
+  font-size: 14px;
+  line-height: 1.12;
+  font-weight: calc(540 + var(--e) * 280);
+  font-stretch: calc(100% - var(--e) * 12%);
+  opacity: calc(0.56 + var(--e) * 0.44);
+  text-shadow: 0 1px 12px rgb(0 0 0 / 0.6);
+  transition: opacity 0.25s ease;
+}
+
+.item:hover .label,
+.item:focus-visible .label {
+  opacity: 1;
+}
+
+.item[aria-current='location'] .label {
+  opacity: 1;
+}
+
+.item:focus-visible {
+  outline: none;
+}
+
+.item:focus-visible .marker {
+  outline: 2px solid var(--pink);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.marker {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  --mark-size: 13px;
+}
+
+.item[data-kind='checkpoint'] .marker > * {
+  filter: drop-shadow(0 1px 3px rgb(0 0 0 / 0.5));
+}
+
+.endpoint {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid var(--birch);
+  background: var(--loam-deep);
+}
+
+/* ---- Narrow screens: a straight strip under the video window ----------------- */
+
+:global([data-narrow='true']) .map {
+  width: var(--stage-w, 90vw);
+  height: 62px;
+}
+
+:global([data-narrow='true']) .column {
+  display: none;
+}
+
+:global([data-narrow='true']) .straight {
+  display: block;
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  top: 16px;
+  height: 3px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(90deg, rgb(238 234 225 / 0.45) 0 7px, transparent 7px 13px);
+}
+
+:global([data-narrow='true']) .riderStraight {
+  top: 50%;
+  left: calc(var(--ride, 0) * 100%);
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+}
+
+:global([data-narrow='true']) .item {
+  top: 16px;
+  right: auto;
+  left: calc(14px + var(--p) * (100% - 28px));
+  padding: 10px;
+  transform: translate(-50%, -50%) scale(calc(1 + var(--e) * 0.22));
+  transform-origin: 50% 50%;
+}
+
+:global([data-narrow='true']) .label {
+  position: absolute;
+  top: calc(100% - 4px);
+  left: 50%;
+  translate: -50% 0;
+  max-width: none;
+  white-space: nowrap;
+  font-size: 13px;
+  opacity: var(--e);
+  pointer-events: none;
+}
+
+/* The first and last labels would hang off the ends; tuck them inward. */
+:global([data-narrow='true']) li:first-child .label {
+  left: 4px;
+  translate: 0 0;
+}
+
+:global([data-narrow='true']) li:last-child .label {
+  left: auto;
+  right: 4px;
+  translate: 0 0;
+}

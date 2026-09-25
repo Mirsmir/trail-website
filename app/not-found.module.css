@@ -1,0 +1,44 @@
+.wrap {
+  min-height: 100dvh;
+  display: grid;
+  place-content: center;
+  justify-items: start;
+  gap: 14px;
+  padding: 32px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.code {
+  margin: 0;
+  font-size: var(--t-sm);
+  font-weight: 650;
+  color: var(--birch-dim);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(48px, 9vw, 104px);
+  font-weight: 860;
+  font-stretch: 75%;
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+}
+
+.line {
+  margin: 0;
+  color: rgb(238 234 225 / 0.82);
+}
+
+.back {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 22px;
+  border-radius: 999px;
+  background: var(--pink);
+  color: var(--loam-deep);
+  font-weight: 650;
+  text-decoration: none;
+}
