@@ -55,9 +55,10 @@ function rings() {
 
 const MARKERS: { at: Pt; label: string; drop: number }[] = [
   { at: [740, 128], label: '+980', drop: 60 },
-  { at: [470, 210], label: '+860', drop: 90 },
-  { at: [350, 560], label: '+720', drop: -70 },
+  { at: [470, 210], label: '', drop: 90 },
+  // { at: [350, 900], label: '+720', drop: -70 },
   { at: [850, 780], label: '+540', drop: 110 },
+  //drop is the dotted lines u ca move em around
 ];
 
 export default function SurveyLines({ className }: { className?: string }) {

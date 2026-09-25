@@ -1,6 +1,5 @@
 /**
- * Everything on the "resume bullshit" page. Replace the examples with yours.
- * Add or remove entries freely; the page renders whatever is here.
+ * Everything on the "resume bullshit" page
  */
 
 export interface Job {
@@ -40,7 +39,7 @@ export interface Resume {
 
 export const resume: Resume = {
   summary:
-    'Replace this with two or three sentences on what you do and what you want to do next. Write it the way you’d say it at a trailhead, not the way a recruiter would.',
+    'trying to land a job',
 
   experience: [
     {
@@ -82,18 +81,19 @@ export const resume: Resume = {
   ],
 
   skills: [
-    { group: 'Languages', items: ['TypeScript', 'Python', 'SQL'] },
-    { group: 'Frameworks', items: ['React', 'Next.js', 'Node'] },
-    { group: 'Tools', items: ['Git', 'Figma', 'Docker'] },
-    { group: 'Off the keyboard', items: ['Trail building', 'Bike maintenance', 'Photography'] },
+    { group: 'Languages', items: ['C++', 'Python', 'Verilog', 'MATLAB', 'JavaScript', 'Java', 'SQL'] },
+    { group: 'DevOps', items: ['Git', 'Jira', 'Jenkins', 'Google Cloud Platform', 'Apache Subversion'] },
+    { group: 'Tools', items: ['KiCad', 'LTSpice', 'Intel Quartus', 'ModelSim', 'WinDbg', 'Latex'] },
+    { group: 'Libs and Protocols', items: ['TensorFlow', 'OpenCV', 'Mediapipe', 'Component Object Model', 'Active Template Library'] },
+    { group: 'Hardware', items: ['Altera MAX10 FPGA', 'ESP32', 'Arduino', 'Raspberry Pi'] }
   ],
 
   education: [
     {
-      school: 'University Name',
-      credential: 'Degree, Program',
-      years: '2020 to 2025',
-      notes: 'Relevant coursework, awards, clubs.',
+      school: 'University of Waterloo',
+      credential: 'Electrical  & Computer Engineering, BCs',
+      years: '2025 - 2030',
+      notes: 'Rocketry, EngSoc, Academic Rep',
     },
   ],
 };

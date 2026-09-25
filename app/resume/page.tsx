@@ -33,11 +33,11 @@ const SAMPLES = [
 ];
 
 const GRADE_NAMES: Record<Grade, string> = {
-  green: 'Green Disco Don.',
-  blue: 'Blue Northern Pass',
-  black: 'Black diamond YoYoMama',
-  'double-black': 'Double black',
-  freeride: 'Freeride',
+  green: '',
+  blue: '',
+  black: '',
+  'double-black': '',
+  freeride: '',
 };
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -144,7 +144,7 @@ export default function ResumePage() {
           </div>
 
           <aside className={styles.legend} aria-hidden>
-            <span className={styles.pill}>Core sample</span>
+            {/* <span className={styles.pill}></span> */}
             <span className={styles.year}>[{new Date().getFullYear()}]</span>
             <span className={styles.north}>
               <b>N</b>
@@ -153,16 +153,16 @@ export default function ResumePage() {
                 <path d="M12 1 12 23 2 31Z" fill="currentColor" />
               </svg>
             </span>
-            <svg viewBox="0 0 40 40" className={styles.icon}>
+            {/* <svg viewBox="0 0 40 40" className={styles.icon}>
               <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" strokeWidth="1.4" />
               <circle cx="20" cy="20" r="11" fill="none" stroke="currentColor" strokeWidth="1.4" strokeDasharray="2 3" />
               <circle cx="20" cy="20" r="4" fill="none" stroke="currentColor" strokeWidth="1.4" />
-            </svg>
+            </svg> */}
             <span className={styles.checker} />
-            <svg viewBox="0 0 40 40" className={styles.icon}>
+            {/* <svg viewBox="0 0 40 40" className={styles.icon}>
               <path d="M20 0v40M0 20h40" stroke="currentColor" strokeWidth="0.8" />
               <path d="M20 12 22 20 20 28 18 20Z" fill="currentColor" />
-            </svg>
+            </svg> */}
             <svg viewBox="0 0 20 16" className={styles.tri}>
               <path d="M0 0h20L10 16Z" fill="currentColor" />
             </svg>
