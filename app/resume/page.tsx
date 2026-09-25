@@ -206,14 +206,14 @@ export default function ResumePage() {
                     </p>
                     {job.summary && <p className={styles.jobSummary}>{job.summary}</p>}
                     <ul className={styles.bullets}>
-                      {job.bullets.map((b) => (
-                        <li key={b}>{b}</li>
+                      {job.bullets.map((b, n) => (
+                        <li key={`${n}-${b}`}>{b}</li>
                       ))}
                     </ul>
                     {job.tags && (
                       <ul className={styles.tags}>
-                        {job.tags.map((t) => (
-                          <li key={t}>{t}</li>
+                        {job.tags.map((t, n) => (
+                          <li key={`${n}-${t}`}>{t}</li>
                         ))}
                       </ul>
                     )}
@@ -242,8 +242,8 @@ export default function ResumePage() {
                   </h3>
                   <p className={styles.projectBlurb}>{p.blurb}</p>
                   <ul className={styles.tags}>
-                    {p.stack.map((t) => (
-                      <li key={t}>{t}</li>
+                    {p.stack.map((t, n) => (
+                      <li key={`${n}-${t}`}>{t}</li>
                     ))}
                   </ul>
                 </article>
