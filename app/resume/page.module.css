@@ -1,129 +1,1229 @@
-.summary {
-  margin: 0 0 clamp(56px, 8vw, 88px);
-  max-width: 50ch;
-  font-size: clamp(var(--t-lg), 2.4vw, var(--t-xl));
-  line-height: 1.4;
+/* ==========================================================================
+   Resume: a trail survey sheet. Dark forest greens, lichen ink, bone paper.
+   Everything here is scoped to this page.
+   ========================================================================== */
+
+.page {
+  --ink: #0a100c;
+  --forest: #101a13;
+  --forest-2: #16241a;
+  --moss-deep: #1f3325;
+  --fern: #6f8f55;
+  --lichen: #b9c46b;
+  --bone: #e4e0d2;
+  --bone-dim: rgb(228 224 210 / 0.7);
+  --bone-faint: rgb(228 224 210 / 0.13);
+  --paper: #dcd8c7;
+  --paper-ink: #16211a;
+
+  --display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+  --serif: 'Fraunces Variable', 'Fraunces', Georgia, serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --sans: 'Inter Tight Variable', 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+
+  --pad: clamp(16px, 5vw, 64px);
+
+  position: relative;
+  isolation: isolate;
+  min-height: 100dvh;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 90% 60% at 70% 0%, #1b2d20 0%, transparent 70%),
+    linear-gradient(180deg, var(--forest) 0%, var(--ink) 55%, #070b08 100%);
+  color: var(--bone);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.page ::selection {
+  background: var(--lichen);
+  color: var(--ink);
+}
+
+.page :focus-visible {
+  outline: 2px solid var(--lichen);
+  outline-offset: 3px;
+}
+
+/* ---- Depth layers ------------------------------------------------------------------ */
+
+/* Far layer: the redwood forest, dissolving into the dark. */
+.backdrop {
+  position: absolute;
+  z-index: -3;
+  inset: 0 0 auto 0;
+  height: min(1300px, 150vh);
+  background: url('/resume/forest.jpg') center 20% / cover no-repeat;
+  opacity: 0.5;
+  filter: blur(1.5px) saturate(0.9);
+  mask-image: linear-gradient(180deg, #000 0%, rgb(0 0 0 / 0.55) 45%, transparent 100%);
+}
+
+.backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 70% at 30% 40%, transparent 0%, rgb(10 16 12 / 0.85) 100%),
+    linear-gradient(90deg, rgb(10 16 12 / 0.9) 0%, transparent 40%);
+}
+
+/* Middle layer: survey contour lines. */
+.survey {
+  position: absolute;
+  z-index: -2;
+  top: -80px;
+  left: 0;
+  width: 100%;
+  height: min(1500px, 170vh);
+  color: var(--lichen);
+  opacity: 0.32;
+  mask-image: linear-gradient(180deg, #000 0%, #000 50%, transparent 95%);
+  pointer-events: none;
+}
+
+/* Near layer: film grain over everything, like a printed poster. */
+.grain {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.wrap {
+  position: relative;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 var(--pad);
+}
+
+/* ---- Top bar ------------------------------------------------------------------------ */
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: clamp(20px, 4vw, 36px);
+}
+
+.topMeta {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bone-dim);
+}
+
+.home {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--bone-dim);
+}
+
+.home:hover {
+  color: var(--lichen);
+}
+
+@media (max-width: 720px) {
+  .topMeta {
+    display: none;
+  }
+}
+
+/* ---- Trail-sign links (carved, mossy boards) --------------------------------------- */
+
+.board {
+  --point: 18px;
+  position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  align-content: center;
+  gap: 4px;
+  min-height: 46px;
+  padding: 10px 20px;
+  color: var(--bone);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  filter: drop-shadow(0 10px 18px rgb(0 0 0 / 0.55));
+}
+
+.board::before,
+.board::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  transition: background 0.3s ease;
+}
+
+.board::before {
+  inset: 0;
+  background: rgb(185 196 107 / 0.35);
+}
+
+.board::after {
+  inset: 1.5px;
+  background:
+    repeating-linear-gradient(177deg, rgb(185 196 107 / 0.05) 0 2px, transparent 2px 9px),
+    linear-gradient(170deg, #26402c 0%, var(--moss-deep) 55%, #0f1a12 100%);
+}
+
+.back,
+.prev {
+  padding-left: calc(20px + var(--point));
+}
+
+.next {
+  padding-right: calc(20px + var(--point));
+  justify-self: end;
+  text-align: right;
+}
+
+.back::before,
+.back::after,
+.prev::before,
+.prev::after {
+  clip-path: polygon(var(--point) 0, calc(100% - 3px) 0, 100% 3px, 100% calc(100% - 3px), calc(100% - 3px) 100%, var(--point) 100%, 0 50%);
+}
+
+.next::before,
+.next::after {
+  clip-path: polygon(0 3px, 3px 0, calc(100% - var(--point)) 0, 100% 50%, calc(100% - var(--point)) 100%, 3px 100%, 0 calc(100% - 3px));
+}
+
+.board:hover::before,
+.board:focus-visible::before {
+  background: var(--lichen);
+}
+
+.board:focus-visible {
+  outline: none;
+}
+
+/* ---- Hero ------------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  padding-top: clamp(56px, 10vw, 120px);
+}
+
+@media (min-width: 900px) {
+  .hero {
+    grid-template-columns: 28px minmax(0, 1fr) 230px 44px;
+    gap: 36px;
+    align-items: start;
+  }
+}
+
+.spine {
+  display: none;
+  margin: 0;
+  writing-mode: vertical-rl;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--bone-dim);
+}
+
+.spine::before {
+  content: '';
+  display: block;
+  width: 22px;
+  height: 22px;
+  margin: 0 auto 18px;
+  border: 1.5px solid var(--lichen);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--lichen) 0 3px, transparent 3.5px);
+}
+
+@media (min-width: 900px) {
+  .spine {
+    display: block;
+  }
+}
+
+.heroMain {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+.grade {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 22px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bone-dim);
+  --mark-size: 18px;
+}
+
+.title {
+  margin: 0;
+  display: grid;
+  line-height: 0.82;
+}
+
+/* STRATA / BEFORE THEY FALL: tall condensed caps in lichen green. */
+.titleBig {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(96px, 17vw, 236px);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--lichen);
+  text-shadow:
+    0 2px 0 #7b8745,
+    0 24px 60px rgb(0 0 0 / 0.6);
+}
+
+/* "the greatest giants of our time." : soft editorial serif. */
+.titleSerif {
+  margin: 0.08em 0 0 0.06em;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 560;
+  font-size: clamp(44px, 7.4vw, 104px);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  color: var(--bone);
+  text-shadow: 0 12px 40px rgb(0 0 0 / 0.7);
+}
+
+.intro {
+  margin: 30px 0 0;
+  max-width: 40ch;
+  font-size: clamp(17px, 1.8vw, 20px);
+  line-height: 1.5;
+  color: rgb(228 224 210 / 0.86);
   text-wrap: pretty;
 }
 
-.jobs {
+.coords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 40px;
+  margin: 34px 0 0;
+  padding-top: 16px;
+  border-top: 1px dotted rgb(185 196 107 / 0.5);
+  max-width: 380px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.coords dt {
+  color: var(--lichen);
+  margin-bottom: 4px;
+}
+
+.coords dd {
+  margin: 0;
+  color: var(--bone-dim);
+}
+
+.actions {
+  margin-top: 30px;
+}
+
+.download {
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 24px;
+  border-radius: 999px;
+  background: var(--lichen);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 12px 30px rgb(0 0 0 / 0.45);
+  transition: background 0.25s ease;
+}
+
+.download:hover {
+  background: #d3dc8a;
+}
+
+/* The mossy trunk with carved wood-grain blocks. */
+.trunk {
+  position: relative;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 56px 0 70px;
+  background:
+    linear-gradient(90deg, rgb(10 16 12 / 0.75) 0%, transparent 22%, transparent 78%, rgb(10 16 12 / 0.85) 100%),
+    url('/resume/bark.jpg') center / cover no-repeat;
+  box-shadow:
+    -30px 30px 60px rgb(0 0 0 / 0.65),
+    inset 0 0 40px rgb(0 0 0 / 0.5);
+  transform: translateY(-40px);
+}
+
+.trunk img {
+  width: 58%;
+  height: auto;
+  filter: drop-shadow(0 6px 6px rgb(0 0 0 / 0.55));
+  opacity: 0.94;
+}
+
+.trunkSig {
+  position: absolute;
+  bottom: 22px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--bone);
+}
+
+@media (min-width: 900px) {
+  .trunk {
+    display: flex;
+  }
+}
+
+/* Strata legend: stacked survey symbols down the right edge. */
+.legend {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  padding-top: 4px;
+  color: var(--bone);
+}
+
+@media (min-width: 900px) {
+  .legend {
+    display: flex;
+  }
+}
+
+.pill {
+  writing-mode: vertical-rl;
+  padding: 14px 7px;
+  border: 1.4px solid var(--bone-dim);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.year {
+  writing-mode: vertical-rl;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+}
+
+.north {
   display: grid;
-  gap: 48px;
+  justify-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.north svg {
+  width: 20px;
+  height: 27px;
+}
+
+.icon {
+  width: 34px;
+  height: 34px;
+}
+
+.checker {
+  width: 26px;
+  height: 26px;
+  background: repeating-conic-gradient(var(--bone) 0 25%, transparent 0 50%) 0 0 / 8.66px 8.66px;
+}
+
+.tri {
+  width: 18px;
+  height: 14px;
+  color: var(--lichen);
+}
+
+/* ---- Field notes (summary) -------------------------------------------------------- */
+
+.notes {
+  position: relative;
+  margin-top: clamp(40px, 6vw, 72px);
+  max-width: 780px;
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 18px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--lichen);
+}
+
+.kicker::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+}
+
+.summary {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 450;
+  font-size: clamp(24px, 3.2vw, 38px);
+  line-height: 1.22;
+  letter-spacing: -0.012em;
+  text-wrap: pretty;
+}
+
+.byline {
+  margin: 18px 0 0;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--bone-dim);
+}
+
+/* ---- Stats + screen-printed forest (The Atlantic Ocean Road) ---------------------- */
+
+.print {
+  position: relative;
+  margin: clamp(64px, 9vw, 110px) calc(var(--pad) * -1) 0;
+  padding: clamp(28px, 4vw, 44px) var(--pad) 0;
+  background: #243520;
+  box-shadow:
+    0 -1px 0 rgb(185 196 107 / 0.15),
+    0 40px 80px rgb(0 0 0 / 0.55);
+}
+
+@media (min-width: 1240px) {
+  .print {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 26px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 760px) {
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.stats li {
+  display: grid;
+  gap: 6px;
+}
+
+.stats strong {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(24px, 3vw, 34px);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--bone);
+}
+
+.stats span {
+  max-width: 18ch;
+  font-size: 15px;
+  line-height: 1.3;
+  color: var(--bone-dim);
+}
+
+/* The cutout: a forest trail, posterized into two inks, with a notched corner. */
+.printArt {
+  margin: clamp(36px, 5vw, 60px) calc(var(--pad) * -1) 0 0;
+  aspect-ratio: 960 / 520;
+  overflow: hidden;
+  clip-path: polygon(0 14%, 7% 14%, 7% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+@media (min-width: 1240px) {
+  .printArt {
+    margin-right: 0;
+  }
+}
+
+.printArt img {
+  width: 100%;
+  height: auto;
+  margin-top: -14%;
+}
+
+/* ---- Sections ------------------------------------------------------------------------ */
+
+.main {
+  padding-top: clamp(72px, 10vw, 128px);
+}
+
+.section {
+  position: relative;
+}
+
+.section + .section {
+  margin-top: clamp(72px, 10vw, 120px);
+}
+
+@media (min-width: 900px) {
+  .section {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 48px;
+  }
+}
+
+.sectionHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 900px) {
+  .sectionHead {
+    flex-direction: column;
+    margin-bottom: 0;
+  }
+}
+
+.sectionGrain {
+  width: 58px;
+  height: auto;
+  flex: none;
+  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.6)) sepia(1) hue-rotate(35deg) saturate(1.6) brightness(0.85);
+}
+
+@media (min-width: 900px) {
+  .sectionGrain {
+    width: 76px;
+  }
+}
+
+.sectionMeta {
+  display: flex;
+  gap: 14px;
+  margin: 0 0 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lichen);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(40px, 5vw, 60px);
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+}
+
+/* Raised panels: a little bark-brown sheen on dark moss, with a real shadow. */
+.card {
+  position: relative;
+  padding: clamp(20px, 3vw, 30px);
+  background:
+    linear-gradient(160deg, rgb(185 196 107 / 0.06), transparent 40%),
+    linear-gradient(180deg, var(--forest-2), #0d1510);
+  border: 1px solid rgb(185 196 107 / 0.14);
+  box-shadow:
+    0 1px 0 rgb(228 224 210 / 0.05) inset,
+    0 24px 50px -18px rgb(0 0 0 / 0.8);
+}
+
+/* Survey corner ticks. */
+.card::before,
+.card::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: var(--lichen);
+  border-style: solid;
+}
+
+.card::before {
+  top: -1px;
+  left: -1px;
+  border-width: 1.5px 0 0 1.5px;
+}
+
+.card::after {
+  right: -1px;
+  bottom: -1px;
+  border-width: 0 1.5px 1.5px 0;
+}
+
+/* Experience: waypoints along a dotted trail. */
+.jobs {
+  position: relative;
+  display: grid;
+  gap: 40px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .job {
+  position: relative;
   display: grid;
-  gap: 8px;
+  gap: 12px;
 }
 
 @media (min-width: 640px) {
+  .jobs::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 5px;
+    border-left: 1.5px dotted rgb(185 196 107 / 0.55);
+  }
+
   .job {
-    grid-template-columns: 110px 1fr;
-    gap: 24px;
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 20px;
   }
 }
 
 .when {
+  position: relative;
   margin: 0;
-  padding-top: 4px;
-  font-size: var(--t-sm);
+  padding: 2px 0 0 26px;
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  font-family: var(--mono);
+  font-size: 13px;
   font-weight: 600;
-  color: var(--birch-dim);
+  color: var(--bone);
   font-variant-numeric: tabular-nums;
+}
+
+.waypoint {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid var(--lichen);
+  background: radial-gradient(var(--lichen) 0 2px, var(--ink) 2.5px);
+}
+
+.wpId {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  color: var(--lichen);
 }
 
 .role {
   margin: 0;
-  font-size: var(--t-lg);
-  font-weight: 760;
+  font-family: var(--sans);
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
   line-height: 1.2;
 }
 
 .company {
   margin: 4px 0 0;
   font-weight: 600;
+  color: var(--lichen);
 }
 
 .where {
   font-weight: 450;
-  color: var(--birch-dim);
+  color: var(--bone-dim);
 }
 
 .jobSummary {
   margin: 10px 0 0;
-  color: var(--birch-dim);
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--bone-dim);
 }
 
 .bullets {
-  margin: 14px 0 16px;
+  margin: 14px 0 18px;
   padding-left: 1.1em;
   display: grid;
   gap: 8px;
   max-width: 64ch;
+  color: rgb(228 224 210 / 0.9);
 }
 
 .bullets li::marker {
-  color: var(--moss);
+  content: '▸  ';
+  color: var(--lichen);
+  font-size: 0.8em;
 }
 
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tags li {
+  padding: 3px 10px;
+  border: 1px solid rgb(185 196 107 / 0.35);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bone-dim);
+}
+
+/* Projects */
 .projects {
   display: grid;
-  gap: 36px;
+  gap: 24px;
 }
 
 @media (min-width: 700px) {
   .projects {
     grid-template-columns: 1fr 1fr;
-    gap: 40px 48px;
   }
 }
 
-.project p {
-  margin: 8px 0 14px;
-  color: rgb(238 234 225 / 0.84);
+.projectNo {
+  margin: 0 0 14px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--lichen);
 }
 
 .projectName {
   margin: 0;
-  font-size: var(--t-lg);
-  font-weight: 760;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
 }
 
 .projectName a {
-  text-decoration-color: var(--pink);
-  text-underline-offset: 4px;
+  text-decoration: underline;
+  text-decoration-color: var(--lichen);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+}
+
+.projectBlurb {
+  margin: 10px 0 18px;
+  color: rgb(228 224 210 / 0.84);
+}
+
+/* ---- Skills: the bone-paper survey sheet ------------------------------------------ */
+
+.sheet {
+  isolation: isolate;
+  overflow: hidden;
+  margin-left: calc(var(--pad) * -1);
+  margin-right: calc(var(--pad) * -1);
+  padding: clamp(32px, 5vw, 56px) var(--pad);
+  color: var(--paper-ink);
+  background:
+    linear-gradient(90deg, transparent calc(50% - 1px), rgb(22 33 26 / 0.07) 50%, transparent calc(50% + 1px)),
+    linear-gradient(180deg, transparent calc(50% - 1px), rgb(22 33 26 / 0.06) 50%, transparent calc(50% + 1px)),
+    radial-gradient(ellipse at 30% 20%, #e9e5d6, var(--paper) 70%);
+  box-shadow:
+    0 50px 90px -30px rgb(0 0 0 / 0.9),
+    0 0 0 1px rgb(0 0 0 / 0.4);
+  transform: rotate(-0.6deg);
+}
+
+@media (min-width: 1240px) {
+  .sheet {
+    margin-left: -24px;
+    margin-right: -24px;
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+}
+
+.sheetLines {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: #3f6b3a;
+  opacity: 0.4;
+}
+
+.sheet .sectionMeta {
+  color: #3f6b3a;
+}
+
+.sheet .sectionGrain {
+  filter: invert(1) sepia(0.5) hue-rotate(60deg) saturate(1.2) brightness(0.55) drop-shadow(0 4px 6px rgb(0 0 0 / 0.2));
 }
 
 .skills {
   margin: 0;
   display: grid;
-  gap: 14px;
+  align-content: start;
+  gap: 0;
 }
 
 .skillRow {
   display: grid;
-  gap: 2px;
+  gap: 4px;
+  padding: 14px 0;
+  border-bottom: 1px dotted rgb(22 33 26 / 0.4);
+}
+
+.skillRow:first-child {
+  padding-top: 0;
 }
 
 @media (min-width: 640px) {
   .skillRow {
-    grid-template-columns: 180px 1fr;
+    grid-template-columns: 220px 1fr;
     gap: 24px;
   }
 }
 
 .skillRow dt {
-  font-weight: 700;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.skillRow dt span {
+  color: #3f6b3a;
 }
 
 .skillRow dd {
   margin: 0;
-  color: rgb(238 234 225 / 0.84);
+  font-weight: 500;
 }
 
+/* Specimen polaroids + grid reference, bottom of the sheet. */
+.samples {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 14px;
+  margin-top: 36px;
+}
+
+.sample {
+  margin: 0;
+  width: clamp(96px, 22vw, 150px);
+  padding: 6px 6px 0;
+  background: #efebdd;
+  border: 1px solid rgb(22 33 26 / 0.55);
+  box-shadow: 0 10px 20px -8px rgb(0 0 0 / 0.5);
+}
+
+.sample:nth-child(2) {
+  transform: translateY(-6px) rotate(1.2deg);
+}
+
+.sample:nth-child(3) {
+  transform: rotate(-1deg);
+}
+
+.sample img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px solid rgb(22 33 26 / 0.6);
+}
+
+.sample figcaption {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 1px 7px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  gap: 4px;
+}
+
+@media (max-width: 480px) {
+  .sample figcaption {
+    font-size: 9px;
+    letter-spacing: 0.02em;
+  }
+}
+
+.gridRef {
+  margin: 0 0 0 auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Education */
 .edu + .edu {
   margin-top: 28px;
+}
+
+/* ---- Onward + footer ---------------------------------------------------------------- */
+
+.onward {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: end;
+  margin-top: clamp(96px, 14vw, 160px);
+}
+
+.prev,
+.next {
+  padding-top: 14px;
+  padding-bottom: 16px;
+}
+
+.prev {
+  justify-self: start;
+}
+
+.boardKicker {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--bone-dim);
+}
+
+.boardName {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(22px, 2.8vw, 30px);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  --mark-size: 0.62em;
+}
+
+.next .boardName {
+  justify-content: flex-end;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-top: 56px;
+  padding: 24px 0 36px;
+  border-top: 1px dotted rgb(185 196 107 / 0.4);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--bone-dim);
+}
+
+.footerLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.footer a {
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: var(--lichen);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .onward {
+    grid-template-columns: 1fr;
+  }
+  .next {
+    justify-self: end;
+  }
+}
+
+/* ---- Arriving from the trail -------------------------------------------------------- */
+
+.top,
+.hero,
+.notes,
+.print,
+.main {
+  animation: arrive 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero {
+  animation-delay: 0.06s;
+}
+
+.notes,
+.print,
+.main {
+  animation-delay: 0.16s;
+}
+
+.backdrop,
+.survey {
+  animation: arriveSoft 2s ease both;
+}
+
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@keyframes arriveSoft {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .top,
+  .hero,
+  .notes,
+  .print,
+  .main,
+  .backdrop,
+  .survey {
+    animation: none;
+  }
+}
+
+/* ---- Paper version: plain ink on white ---------------------------------------------- */
+
+@media print {
+  .page {
+    background: #fff;
+    color: #111;
+    overflow: visible;
+    font-size: 11pt;
+  }
+  .backdrop,
+  .survey,
+  .grain,
+  .top,
+  .spine,
+  .trunk,
+  .legend,
+  .coords,
+  .printArt,
+  .sectionGrain,
+  .sheetLines,
+  .samples,
+  .onward,
+  .footer,
+  .waypoint,
+  .wpId,
+  .jobs::before {
+    display: none !important;
+  }
+  .hero {
+    display: block;
+    padding-top: 0;
+  }
+  .titleBig,
+  .titleSerif,
+  .company,
+  .sectionMeta,
+  .kicker {
+    color: #111;
+    text-shadow: none;
+  }
+  .print,
+  .sheet,
+  .card {
+    margin: 0;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    border: 0;
+    transform: none;
+    color: #111;
+  }
+  .card::before,
+  .card::after {
+    display: none;
+  }
+  .stats strong,
+  .stats span,
+  .intro,
+  .bullets,
+  .projectBlurb,
+  .where,
+  .jobSummary,
+  .byline {
+    color: #333;
+  }
+  .when {
+    padding-left: 0;
+    color: #111;
+  }
+  .main {
+    padding-top: 24px;
+  }
+  .section + .section {
+    margin-top: 28px;
+  }
 }
