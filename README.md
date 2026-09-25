@@ -1,8 +1,5 @@
 # Trail portfolio
-
-A portfolio you ride through. The home page is first-person mountain-bike footage: scrolling pedals the bike, letting go coasts it to a stop, and trail signs standing in the forest link to the rest of the site.
-
-## Run it
+Run it
 
 You need Node 20 or newer.
 
