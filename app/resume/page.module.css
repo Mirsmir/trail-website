@@ -16,10 +16,11 @@
   --paper: #dcd8c7;
   --paper-ink: #16211a;
 
-  --display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
-  --serif: 'Fraunces Variable', 'Fraunces', Georgia, serif;
-  --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
-  --sans: 'Inter Tight Variable', 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  /* Set by ./fonts.ts */
+  --display: var(--font-display);
+  --serif: var(--font-serif);
+  --mono: var(--font-mono);
+  --sans: var(--font-sans);
 
   --pad: clamp(16px, 5vw, 64px);
 

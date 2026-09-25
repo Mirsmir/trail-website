@@ -1,15 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import '@fontsource/anton/400.css';
-import '@fontsource/jetbrains-mono/400.css';
-import '@fontsource/jetbrains-mono/600.css';
-import '@fontsource-variable/fraunces/standard.css';
-import '@fontsource-variable/fraunces/standard-italic.css';
-import '@fontsource-variable/inter-tight/index.css';
 import GradeMark from '@/components/GradeMark';
 import { checkpointBySlug, checkpoints, type Grade } from '@/content/checkpoints';
 import { resume } from '@/content/resume';
 import { site } from '@/content/site';
+import { display, mono, sans, serif } from './fonts';
 import SurveyLines from './SurveyLines';
 import styles from './page.module.css';
 
@@ -79,7 +74,7 @@ export default function ResumePage() {
   const [firstWord, ...rest] = cp.label.split(' ');
 
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} ${display.variable} ${serif.variable} ${mono.variable} ${sans.variable}`}>
       {/* Depth: misty forest far back, survey lines in the middle, grain on top. */}
       <div className={styles.backdrop} aria-hidden />
       <SurveyLines className={styles.survey} />
